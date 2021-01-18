@@ -69,7 +69,7 @@ export class RegistrationComponent implements OnInit {
       'confirmation': new FormControl('', requiredArray),
       'nickname': new FormControl('', requiredArray.concat([Validators.pattern('[a-zA-Z0-9-]*')])),
       'phone': new FormControl('', requiredArray.concat([Validators.pattern('(\\+380\\d{9})?')])),
-      'website': new FormControl('', requiredArray.concat([Validators.pattern('((https?:\\/\\/)?(www\\.)?([a-zA-Z0-9][a-zA-Z0-9-]*\\.)+[a-zA-Z]+.*)?')])),
+      'website': new FormControl('', requiredArray.concat([Validators.pattern('((https?:\\/\\/)?(www\\.)?([a-zA-Z0-9][a-zA-Z0-9-]*[a-zA-Z0-9]\\.)+[a-zA-Z]+.*)?')])),
       'agreement': new FormControl('', [Validators.requiredTrue]),
     });
     this.form.setValidators(this.confirmPassword());
