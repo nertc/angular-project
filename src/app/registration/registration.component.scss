@@ -80,6 +80,10 @@ label {
 
                 transition: linear 0.25s;
             }
+            &:checked:disabled+::before {
+                background-color: $outline-dark;
+            }
+
             &:checked+::before {
                 content: "✔";
                 border: none;

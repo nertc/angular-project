@@ -1,27 +1,27 @@
 <div class="container">
     <form [formGroup]="form" (ngSubmit)="onSubmit()">
         <label>
-            <p><span>*</span> E-mail:</p>
+            <p><span *ngIf="!edit">* </span>E-mail:</p>
             <input type="email" formControlName="email" [ngClass]="{invalid: !isValidNotRequired('email')}">
         </label>
         <label>
-            <p><span>*</span> Password:</p>
+            <p><span *ngIf="!edit">* </span>Password:</p>
             <input type="password" formControlName="password" [ngClass]="{invalid: !isValidNotRequired('password')}">
         </label>
         <label>
-            <p><span>*</span> Confirm Password:</p>
+            <p><span *ngIf="!edit">* </span>Confirm Password:</p>
             <input type="password" formControlName="confirmation" [ngClass]="{invalid: !isValidNotRequired('confirmation') || !this.confirmationValid}">
         </label>
         <label>
-            <p><span>*</span> Nickname:</p>
+            <p><span *ngIf="!edit">* </span>Nickname:</p>
             <input type="text" formControlName="nickname" [ngClass]="{invalid: !isValidNotRequired('nickname')}">
         </label>
         <label>
-            <p><span>*</span> Phone Number:</p>
+            <p><span *ngIf="!edit">* </span>Phone Number:</p>
             <input type="tel" formControlName="phone" [ngClass]="{invalid: !isValidNotRequired('phone')}">
         </label>
         <label>
-            <p><span>*</span> Website:</p>
+            <p><span *ngIf="!edit">* </span>Website:</p>
             <input type="text" formControlName="website" placeholder="website" [ngClass]="{invalid: !isValidNotRequired('website')}">
         </label>
         <label>
@@ -29,7 +29,7 @@
                 <input type="checkbox" formControlName="agreement"> <p>I have read the <a href="#">agreement</a></p>
             </div>
         </label>
-        <button type="submit" [disabled]="!canRegister">Register</button>
-        <p class="info">{{invalidText}}<span class="invisible">|</span></p>
+        <button type="submit" [disabled]="!canRegister">{{edit ? 'Edit' : 'Register'}}</button>
+        <p class="info">{{infoText}}<span class="invisible">|</span></p>
     </form>
 </div>

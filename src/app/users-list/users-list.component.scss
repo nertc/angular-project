@@ -21,10 +21,13 @@
     flex-direction: column;
 }
 
-.header {
+.header, li {
     display: grid;
-    grid-template-columns: 50px repeat(5, 1fr) 50px;
+    grid-template-columns: 50px repeat(4, 1fr) 50px 50px;
     width: 100%;
+}
+
+.header {
     box-shadow: inset 0 -20px 20px -20px $outline-dark;
     
     p {
@@ -66,10 +69,6 @@ p {
 }
 
 li {
-    display: grid;
-    grid-template-columns: 50px repeat(5, 1fr) 50px;
-    width: 100%;
-
     &:hover {
         background-color: $grey;
     }
@@ -89,7 +88,7 @@ li {
         }
     }
 
-    &>:last-child {
+    &>div {
         display: flex;
         justify-content: center;
         align-items: center;
@@ -111,7 +110,12 @@ li {
             align-items: center;
 
             &:hover {
-                color: red;
+                &.delete {
+                    color: red;
+                }
+                &.edit {
+                    color: lime;
+                }
                 box-shadow: 0 0 5px $outline-dark;
             }
         }

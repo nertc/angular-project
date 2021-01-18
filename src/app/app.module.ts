@@ -23,6 +23,7 @@ import { UsersListComponent } from './users-list/users-list.component';
     RouterModule.forRoot([
       { path: '', component: RegistrationComponent },
       { path: 'users', component: UsersListComponent },
+      { path: 'edit/:userId', component: RegistrationComponent },
     ])
   ],
   providers: [],

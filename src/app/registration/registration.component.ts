@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { MathService } from '../math.service';
-import { UsersService } from '../users.service';
+import { User, UsersService } from '../users.service';
 
 @Component({
   selector: 'app-registration',
@@ -9,43 +10,91 @@ import { UsersService } from '../users.service';
   styleUrls: ['./registration.component.scss']
 })
 export class RegistrationComponent implements OnInit {
-  form: FormGroup;
+  form: FormGroup = new FormGroup({});
   confirmationValid: boolean = false;
-  invalidText: string = "";
+  infoText: string = "";
+  userToEdit: User | undefined;
+  edit: boolean = false;
+  userId: number = 0;
 
   constructor(
     private fb: FormBuilder,
     private mathService: MathService,
-    private usersService: UsersService
+    private usersService: UsersService,
+    private route: ActivatedRoute
   ) {
+  }
+
+  ngOnInit(): void {
+    const routeParams = this.route.snapshot.paramMap;
+    const idUnformatted = routeParams.get('userId');
+    if( !idUnformatted ) {
+      this.edit = false;
+      this.defineForm();
+      return;
+    }
+
+    const userId = Number(idUnformatted);
+    this.userToEdit = this.usersService.getUsers().get(userId);
+    if( !this.userToEdit ) {
+      this.edit = false;
+      this.defineForm();
+      return;
+    }
+
+    this.userId = userId;
+
+    this.edit = true;
+    this.infoText = 'Blank fields will remain unchanged';
+    this.defineForm();
+    this.form.patchValue({
+      'email': this.userToEdit.email,
+      'password': '',
+      'confirmation': '',
+      'nickname': this.userToEdit.nickname,
+      'phone': this.userToEdit.phone,
+      'website': this.userToEdit.website,
+      'agreement': true
+    });
+    this.form.get('agreement')?.disable();
+  }
+
+  private defineForm(): void {
+    const requiredArray: Array<(control: AbstractControl) => ValidationErrors | null> = [];
+    if( !this.edit ) requiredArray.push(Validators.required);
+
     this.form = this.fb.group({
-      'email': new FormControl('', [Validators.required, Validators.email]),
-      'password': new FormControl('', [Validators.required, Validators.pattern('[a-zA-Z0-9]+'), Validators.minLength(8)]),
-      'confirmation': new FormControl('', [Validators.required]),
-      'nickname': new FormControl('', [Validators.required, Validators.pattern('[a-zA-Z0-9_]+')]),
-      'phone': new FormControl('', [Validators.required, Validators.pattern('\\+380\\d{9}')]),
-      'website': new FormControl('', [Validators.required, Validators.pattern('(https?:\\/\\/)?(www\\.)?([a-zA-Z0-9][a-zA-Z0-9-]*\\.)+[a-zA-Z]+.*')]),
+      'email': new FormControl('', requiredArray.concat([Validators.email])),
+      'password': new FormControl('', requiredArray.concat([Validators.pattern('[a-zA-Z0-9]*'), Validators.minLength(8)])),
+      'confirmation': new FormControl('', requiredArray),
+      'nickname': new FormControl('', requiredArray.concat([Validators.pattern('[a-zA-Z0-9-]*')])),
+      'phone': new FormControl('', requiredArray.concat([Validators.pattern('(\\+380\\d{9})?')])),
+      'website': new FormControl('', requiredArray.concat([Validators.pattern('((https?:\\/\\/)?(www\\.)?([a-zA-Z0-9][a-zA-Z0-9-]*\\.)+[a-zA-Z]+.*)?')])),
       'agreement': new FormControl('', [Validators.requiredTrue]),
     });
     this.form.setValidators(this.confirmPassword());
   }
 
-  ngOnInit(): void {
-  }
-
   onSubmit() {
-    if( this.form.valid ){
-      const [cryptedPassword, e, n] = this.mathService.encrypt(this.form.get('password')?.value);
-      this.usersService.addUser({
+    if( this.form.valid ) {
+      const password = this.form.get('password')?.value;
+      const [cryptedPassword, e, n] = password ? this.mathService.encrypt(password) : ['', 0, 0];
+      const user: User = {
         email: this.form.get('email')?.value,
         password: cryptedPassword,
         nickname: this.form.get('nickname')?.value,
         phone: this.form.get('phone')?.value,
         website: this.form.get('website')?.value,
         passwordKeys: [e, n]
-      });
+      };
 
-      this.invalidText = "Succesful registration !";
+      if( this.edit ) {
+        this.usersService.changeUser(this.userId, user);
+        this.infoText = "Successful change !"
+      } else {
+        this.usersService.addUser(user);
+        this.infoText = "Successful registration !";
+      }
     } else {
       this.validate();
     }
@@ -60,19 +109,19 @@ export class RegistrationComponent implements OnInit {
       
       switch( Object.getOwnPropertyNames(control.errors)[0] ) {
         case 'required':
-          this.invalidText = `Fields with asterisk(*) are required`;
+          this.infoText = `Fields with asterisk(*) are required`;
           break;
         case 'email':
-          this.invalidText = `Such mail doesn't exist`;
+          this.infoText = `Such mail doesn't exist`;
           break;
         case 'pattern':
-          this.invalidText = `${controlName} must satisfy the pattern ${control.errors.pattern.requiredPattern}`;
+          this.infoText = `${controlName} must satisfy the pattern ${control.errors.pattern.requiredPattern}`;
           break;
         case 'minlength':
-          this.invalidText = `Length of the ${controlName} must be more than or equal to ${control.errors.minlength.requiredLength}`;
+          this.infoText = `Length of the ${controlName} must be more than or equal to ${control.errors.minlength.requiredLength}`;
           break;
         default:
-          this.invalidText = `Something went wrong! Please, try again`
+          this.infoText = `Something went wrong! Please, try again`
           break;
       }
     }

@@ -25,6 +25,7 @@ export class UsersListComponent implements OnInit {
 
       for( let key in user ) {
         if( !this.usersService.checkType(key) ) continue;
+        if( key === 'password' ) continue;
         temp.push(user[key]);
       }
 

@@ -3,7 +3,6 @@
         <div class="header">
             <p>ID</p>
             <p>E-mail</p>
-            <p>Password (Encrypted)</p>
             <p>Nickname</p>
             <p>Phone</p>
             <p>Website</p>
@@ -11,7 +10,8 @@
         <ul>
             <li *ngFor="let user of usersData">
                 <p *ngFor="let item of user">{{item}}</p>
-                <div><button (click)="delete(user[0])"><i class="las la-trash-alt"></i></button></div>
+                <div><button (click)="delete(user[0])" class="delete"><i class="las la-trash-alt"></i></button></div>
+                <div><button [routerLink]="['/edit', user[0]]" class="edit"><i class="las la-pen"></i></button></div>
             </li>
         </ul>
     </div>
