@@ -6,7 +6,7 @@ import { Injectable } from '@angular/core';
 export class MathService {
   private primes: Array<number> = [];
   private checkNotPrime: Array<boolean> = [];
-  private MAX_NUMBER: number = Math.sqrt(Number.MAX_SAFE_INTEGER / 10);
+  private MAX_NUMBER: number = Math.sqrt(Number.MAX_SAFE_INTEGER / 100);
 
   constructor() {
     this.getPrimes();
