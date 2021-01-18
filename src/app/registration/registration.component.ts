@@ -36,7 +36,7 @@ export class RegistrationComponent implements OnInit {
   onSubmit() {
     if( this.form.valid ){
       const [cryptedPassword, e, n] = this.mathService.encrypt(this.form.get('password')?.value);
-      this.usersService.users.push({
+      this.usersService.addUser({
         email: this.form.get('email')?.value,
         password: cryptedPassword,
         nickname: this.form.get('nickname')?.value,
@@ -47,7 +47,6 @@ export class RegistrationComponent implements OnInit {
 
       this.invalidText = "Succesful registration !";
     } else {
-      console.log(this.form.get('email'));
       this.validate();
     }
   }
