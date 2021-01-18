@@ -2,7 +2,7 @@
     <h1><span>USER</span> manager</h1>
     
     <div class="buttons" *ngFor="let item of menuItems">
-        <button><i [class]="item.icon"></i>{{item.title}}</button>
+        <button [routerLink]="item.router"><i [class]="item.icon"></i>{{item.title}}</button>
     </div>
     
     <footer>

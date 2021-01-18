@@ -1,0 +1,18 @@
+<div class="container">
+    <div class="list-container">
+        <div class="header">
+            <p>ID</p>
+            <p>E-mail</p>
+            <p>Password (Encrypted)</p>
+            <p>Nickname</p>
+            <p>Phone</p>
+            <p>Website</p>
+        </div>
+        <ul>
+            <li *ngFor="let user of usersData">
+                <p *ngFor="let item of user">{{item}}</p>
+                <div><button (click)="delete(user[0])"><i class="las la-trash-alt"></i></button></div>
+            </li>
+        </ul>
+    </div>
+</div>

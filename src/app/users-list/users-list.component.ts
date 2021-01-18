@@ -1,0 +1,46 @@
+import { Component, OnInit } from '@angular/core';
+import { UsersService, User, UserProperty } from '../users.service';
+
+@Component({
+  selector: 'app-users-list',
+  templateUrl: './users-list.component.html',
+  styleUrls: ['./users-list.component.scss']
+})
+export class UsersListComponent implements OnInit {
+
+  constructor(
+    private usersService: UsersService
+  ) { }
+
+  ngOnInit(): void {
+  }
+
+  get usersData(): Array<string[]> {
+    const map = this.usersService.getUsers();
+    const output: Array<string[]> = [];
+    
+    map.forEach( (user, id) => {
+      const temp: string[] = [];
+      temp.push(id.toString());
+
+      for( let key in user ) {
+        if( !this.usersService.checkType(key) ) continue;
+        temp.push(user[key]);
+      }
+
+      output.push(temp);
+    });
+
+    return output;
+  }
+
+  delete( id: any ): void {
+    id = Number(id);
+    const sure = confirm(`This action will remove a user with this email: ${this.usersService.getUsers().get(id)?.email}\n\nAre you sure?`);
+    if( sure ) {
+      if( !this.usersService.deleteUser(id) ) {
+        alert('Error occured');
+      }
+    }
+  }
+}

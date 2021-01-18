@@ -6,17 +6,24 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { MenuComponent } from './menu/menu.component';
 import { RegistrationComponent } from './registration/registration.component';
+import { RouterModule } from '@angular/router';
+import { UsersListComponent } from './users-list/users-list.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     MenuComponent,
-    RegistrationComponent
+    RegistrationComponent,
+    UsersListComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    RouterModule.forRoot([
+      { path: '', component: RegistrationComponent },
+      { path: 'users', component: UsersListComponent },
+    ])
   ],
   providers: [],
   bootstrap: [AppComponent]
