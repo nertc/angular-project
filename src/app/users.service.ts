@@ -20,7 +20,7 @@ export class UsersService {
   userProperties: Array<UserProperty> = ['email', 'password', 'nickname', 'phone', 'website']
 
   constructor() {
-    // this.forTesting();
+    this.forTesting();
     this.id = this.users.size;
   }
 

@@ -8,7 +8,8 @@ import { Component, OnInit } from '@angular/core';
 export class MenuComponent implements OnInit {
   menuItems: Array<{ icon: string, title: string, router: Array<string> }> = [
     { icon: "las la-user-plus", title: "Registration", router: ['/'] },
-    { icon: "las la-users", title: "List of Users", router: ['/users']}
+    { icon: "las la-users", title: "List of Users", router: ['/users']},
+    { icon: "las la-exchange-alt", title: "Exchange", router: ['/exchange']}
   ];
 
   constructor() { }
