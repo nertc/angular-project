@@ -21,6 +21,8 @@ form {
         background: none;
         border: none;
 
+        transition: 0.1s linear;
+
         &:disabled {
             color: $outline-dark;
         }
@@ -46,7 +48,7 @@ form {
 
 .left>*:not(.buttons), .right {
     display: grid;
-    grid-template-columns: 60px 1fr auto;
+    grid-template-columns: 82px 1fr auto;
 
     box-shadow: 0 0 11px 2px $outline-dark;
     margin-bottom: 5px;
@@ -78,10 +80,8 @@ select, option {
     justify-content: center;
     align-items: center;
 
-    font-size: 110%;
+    font-size: 117%;
     font-weight: $medium;
-
-    padding: 0 10px;
 
     cursor: pointer;
 
@@ -99,6 +99,7 @@ select, option {
 
     &+.options {
         height: 500%;
+        opacity: 1;
     }
 }
 
@@ -111,8 +112,9 @@ select, option {
     overflow: scroll;
     transition: 0.2s linear;
     width: 100%;
-    box-shadow: 0 10px 10px $outline-dark;
+    box-shadow: 0 6px 11px 2px $outline-dark;
     overflow-x: hidden;
+    opacity: 0;
 
     p {
         padding: 5px;
