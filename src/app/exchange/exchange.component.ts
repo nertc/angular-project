@@ -1,8 +1,10 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
+import { RSA_PKCS1_OAEP_PADDING } from 'constants';
+import { promise } from 'protractor';
 import { of, Subject, Subscription } from 'rxjs';
-import { take } from 'rxjs/operators';
+import { reduce, scan, take, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-exchange',
@@ -71,31 +73,37 @@ export class ExchangeComponent implements OnInit {
   defineFormgroup(): void {
     this.fg = new FormGroup({
       'left': new FormArray([
-        this.createFormElement(),
         this.createFormElement()
       ]),
       'right': this.createFormElement()
     });
 
-    const updateInput = ({currency, val: value}: { currency: string, val: string }, input: AbstractControl): void => {
-      this.subscriptions.push(this.http.get(`https://api.exchangeratesapi.io/latest?base=${currency}&symbols=${input.get('currency')?.value}`)
+    const currencyRateGenerator = async({currency, val: value}: { currency: string, val: string }, input: AbstractControl): Promise<number> => {
+      return new Promise<number>( res => {
+        this.http.get(`https://api.exchangeratesapi.io/latest?base=${currency}&symbols=${input.get('currency')?.value}`)
           .pipe(take(1)).subscribe(info => {
             if (!('rates' in info && input.get('currency')?.value in info['rates'])) return;
             const rate = info['rates'][input.get('currency')?.value];
-            input.get('val')?.setValue((Number(input.get('val')?.value) + Number(value) * Number(rate)).toFixed(2));
-          }));
+
+            res(Number(value) * Number(rate));
+          })
+        });
     };
 
     this.subscriptions.push(this.left.valueChanges.subscribe(pair => {
       if(!this.leftFocused && !this.leftChanged) return;
       if(this.left.invalid) return;
+
       clearTimeout(this.triggerChange);
       this.triggerChange = setTimeout(() => {
-        this.right.get('val')?.setValue(0);
+        let finalFunction: Promise<number> = (async () => 0)();
         this.subscriptions.push(
-          of(...pair).subscribe(o => updateInput(o, this.right))
+          of(...pair).pipe(
+            reduce((acc, v) => this.asyncMerger(currencyRateGenerator(v, this.right), acc), finalFunction),
+            take(1)
+          ).subscribe(v => v.then(ans => this.right.get('val')?.setValue(ans.toFixed(2))))
         );
-      }, 1000);
+      }, 500);
     }));
     
     this.subscriptions.push(this.right.valueChanges.subscribe(o => {
@@ -103,12 +111,12 @@ export class ExchangeComponent implements OnInit {
       if(this.left.length > 1) return;
       if(this.right.invalid) return;
       if(!('currency' in o && 'val' in o)) return;
+
       clearTimeout(this.triggerChange);
       this.triggerChange = setTimeout(() => {
         const input =  <AbstractControl>this.left.get('0');
-        input.get('val')?.setValue(0);
-        updateInput(o, input);
-      }, 1000)
+        currencyRateGenerator(o, input).then(ans => input.get('val')?.setValue(ans.toFixed(2)));
+      }, 500)
     }));
   }
 
@@ -172,5 +180,9 @@ export class ExchangeComponent implements OnInit {
         this.rightChanged = false;
       }
     }
+  }
+
+  async asyncMerger(p1: Promise<number>, p2: Promise<number>): Promise<number> {
+    return (await p1) + (await p2);
   }
 }
