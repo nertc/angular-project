@@ -3,20 +3,20 @@
         <div formArrayName="left" class="left">
             <div *ngFor="let leftExchange of left.controls; index as i" [formGroupName]="i" [ngClass]="{'invalid': !isValid(i)}">
                 <div class="select-container">
-                    <select formControlName="currency" (blur)="leftFocused = false" (focus)="leftFocused = true">
+                    <select formControlName="currency">
                         <option *ngFor="let currency of currencies">{{currency}}</option>
                     </select>
-                    <div class="select" onclick="this.classList.toggle('selected')">{{left.get(i.toString())?.get('currency')?.value}}</div>
+                    <div class="select" onclick="this.classList.toggle('selected')">{{left.get(i.toString())?.get('currency')?.value}}<i class="las la-angle-down"></i></div>
                     <div class="options">
-                        <p *ngFor="let currency of currencies" (click)="left.get(i.toString())?.get('currency')?.setValue(currency)">{{currency}}</p>
+                        <p *ngFor="let currency of currencies" (click)="selectCurrency(currency, i)">{{currency}}</p>
                     </div>
                 </div>
-                <input type="text" formControlName="val" (blur)="leftFocused = false" (focus)="leftFocused = true">
-                <button class="remove" [ngClass]="{'invisible': !(left.length > 1)}" (click)="left.removeAt(i)"><i class="las la-times"></i></button>
+                <input type="number" formControlName="val" (blur)="leftFocused = false" (focus)="leftFocused = true">
+                <button class="remove" [ngClass]="{'invisible': !(left.length > 1)}" (click)="$changeLeftExchange.next({v:-1, i:i})"><i class="las la-times"></i></button>
             </div>
             <div class="buttons">
-                <button (click)="$changeLeftExchange.next(-1)">-</button>
-                <button (click)="$changeLeftExchange.next(1)">+</button>
+                <button (click)="$changeLeftExchange.next({v:-1})">Remove Currency</button>
+                <button (click)="$changeLeftExchange.next({v:1})">Add Currency</button>
             </div>
         </div>
         <button (click)="swap()" [disabled]="left.length > 1 || left.invalid || right.invalid"><i class="las la-sync"></i></button>
@@ -25,12 +25,12 @@
                 <select formControlName="currency" (blur)="rightFocused = false" (focus)="rightFocused = true">
                     <option *ngFor="let currency of currencies">{{currency}}</option>
                 </select>
-                <div class="select" onclick="this.classList.toggle('selected')">{{right.get('currency')?.value}}</div>
+                <div class="select" onclick="this.classList.toggle('selected')">{{right.get('currency')?.value}}<i class="las la-angle-down"></i></div>
                 <div class="options">
-                    <p *ngFor="let currency of currencies" (click)="right.get('currency')?.setValue(currency)">{{currency}}</p>
+                    <p *ngFor="let currency of currencies" (click)="selectCurrency(currency)">{{currency}}</p>
                 </div>
             </div>
-            <input type="text" formControlName="val" (blur)="rightFocused = false" (focus)="rightFocused = true">
+            <input type="number" formControlName="val" (blur)="rightFocused = false" (focus)="rightFocused = true">
         </div>
     </form>
 </div>

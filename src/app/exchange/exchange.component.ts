@@ -12,11 +12,14 @@ import { take } from 'rxjs/operators';
 export class ExchangeComponent implements OnInit {
   fg: FormGroup = new FormGroup({});
   currencies: Array<string> = [];
-  $changeLeftExchange = new Subject<number>();
+  $changeLeftExchange = new Subject<{v: number, i?: number}>();
   subscriptions: Array<Subscription> = [];
   rightFocused: boolean = false;
   leftFocused: boolean = false;
   oldOnclick = document.onclick;
+  leftChanged: boolean = false;
+  rightChanged: boolean = false;
+  triggerChange = setTimeout(() => {}, 0);
 
   constructor(
     private http: HttpClient
@@ -47,13 +50,19 @@ export class ExchangeComponent implements OnInit {
     this.defineFormgroup();
 
     this.subscriptions.push(this.$changeLeftExchange.subscribe({
-      next: v => {
+      next: ({v, i = this.left.length - 1}) => {
         if (!v || this.left.length + v < 1) return;
 
         if (v > 0) {
           this.left.push(this.createFormElement());
         } else {
-          this.left.removeAt(this.left.length - 1);
+          this.remove(i);
+        }
+        
+        if(this.left.length > 1) {
+          this.right.get('val')?.disable();
+        } else {
+          this.right.get('val')?.enable();
         }
       }
     }));
@@ -73,27 +82,33 @@ export class ExchangeComponent implements OnInit {
           .pipe(take(1)).subscribe(info => {
             if (!('rates' in info && input.get('currency')?.value in info['rates'])) return;
             const rate = info['rates'][input.get('currency')?.value];
-            input.get('val')?.setValue(Number(input.get('val')?.value) + Number(value) * Number(rate));
+            input.get('val')?.setValue((Number(input.get('val')?.value) + Number(value) * Number(rate)).toFixed(2));
           }));
     };
 
     this.subscriptions.push(this.left.valueChanges.subscribe(pair => {
-      if(!this.leftFocused) return;
+      if(!this.leftFocused && !this.leftChanged) return;
       if(this.left.invalid) return;
-      this.right.get('val')?.setValue(0);
-      this.subscriptions.push(
-        of(...pair).subscribe(o => updateInput(o, this.right))
-      );
+      clearTimeout(this.triggerChange);
+      this.triggerChange = setTimeout(() => {
+        this.right.get('val')?.setValue(0);
+        this.subscriptions.push(
+          of(...pair).subscribe(o => updateInput(o, this.right))
+        );
+      }, 1000);
     }));
     
     this.subscriptions.push(this.right.valueChanges.subscribe(o => {
-      if(!this.rightFocused) return;
+      if(!this.rightFocused && !this.rightChanged) return;
       if(this.left.length > 1) return;
       if(this.right.invalid) return;
       if(!('currency' in o && 'val' in o)) return;
-      const input =  <AbstractControl>this.left.get('0');
-      input.get('val')?.setValue(0);
-      updateInput(o, input);
+      clearTimeout(this.triggerChange);
+      this.triggerChange = setTimeout(() => {
+        const input =  <AbstractControl>this.left.get('0');
+        input.get('val')?.setValue(0);
+        updateInput(o, input);
+      }, 1000)
     }));
   }
 
@@ -112,7 +127,7 @@ export class ExchangeComponent implements OnInit {
   createFormElement(): FormGroup {
     return new FormGroup({
       'currency': new FormControl(this.currencies[0]),
-      'val': new FormControl('0', { validators: [Validators.required, Validators.pattern("\\d+(\\.\\d+)?")] })
+      'val': new FormControl('0', { validators: [Validators.required, Validators.pattern('\\d+\\.?\\d*')] })
     });
   }
 
@@ -130,5 +145,32 @@ export class ExchangeComponent implements OnInit {
     const [rcur, rval] = [rightCur?.value, rightVal?.value];
     leftCur?.setValue(rcur), leftVal?.setValue(rval);
     rightCur?.setValue(lcur), rightVal?.setValue(lval);
+  }
+
+  remove( index: number ): void {
+    if( this.left.length <= 1 ) return;
+    this.leftChanged = true;
+    this.left.removeAt(index);
+    this.leftChanged = false;
+  }
+
+  selectCurrency( currency: string, index: number = -1 ) {
+    if(index !== -1) {
+      this.leftChanged = true;
+      this.left.get(index.toString())?.get('currency')?.setValue(currency);
+      this.leftChanged = false;
+    } else {
+      if( this.left.length > 1 ) {
+        this.right.get('currency')?.setValue(currency);
+        this.leftChanged = true;
+        const leftCur = this.left.get('0')?.get('currency');
+        leftCur?.setValue(leftCur?.value);
+        this.leftChanged = false;
+      } else {
+        this.rightChanged = true;
+        this.right.get('currency')?.setValue(currency);
+        this.rightChanged = false;
+      }
+    }
   }
 }
