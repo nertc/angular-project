@@ -10,6 +10,7 @@ import { RegistrationComponent } from './registration/registration.component';
 import { RouterModule } from '@angular/router';
 import { UsersListComponent } from './users-list/users-list.component';
 import { ExchangeComponent } from './exchange/exchange.component';
+import { EmployeeRegisterComponent } from './employee-register/employee-register.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { ExchangeComponent } from './exchange/exchange.component';
     MenuComponent,
     RegistrationComponent,
     UsersListComponent,
-    ExchangeComponent
+    ExchangeComponent,
+    EmployeeRegisterComponent
   ],
   imports: [
     BrowserModule,
@@ -28,7 +30,8 @@ import { ExchangeComponent } from './exchange/exchange.component';
       { path: '', component: RegistrationComponent },
       { path: 'users', component: UsersListComponent },
       { path: 'edit/:userId', component: RegistrationComponent },
-      { path: 'exchange', component: ExchangeComponent}
+      { path: 'exchange', component: ExchangeComponent},
+      { path: 'employee/register', component: EmployeeRegisterComponent}
     ])
   ],
   providers: [],

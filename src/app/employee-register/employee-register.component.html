@@ -1,0 +1,21 @@
+<div class="container">
+  <form [formGroup]="fg" (ngSubmit)="submit()">
+    <label>
+      <p><span>* </span>Name:</p>
+      <input type="text" formControlName="name" [ngClass]="{invalid: !isValidNotRequired(fname)}">
+    </label>
+    <label>
+      <p><span>* </span>Salary:</p>
+      <input type="number" formControlName="salary" [ngClass]="{invalid: !isValidNotRequired(fsalary)}">
+    </label>
+    <label>
+      <p><span>* </span>Age:</p>
+      <input type="number" formControlName="age" [ngClass]="{invalid: !isValidNotRequired(fage)}">
+    </label>
+    <button type="submit" [disabled]="fg.invalid">Register</button>
+    <div class="status-container">
+      <p class="info" *ngIf="status">{{status}}</p>
+      <img src="../../assets/images/loading.svg" alt="Loading..." *ngIf="!status">
+    </div>
+  </form>
+</div>
