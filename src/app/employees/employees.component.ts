@@ -15,6 +15,7 @@ export class EmployeesComponent implements OnInit {
   public perPage: number = 8;
   public isChanging: boolean[] = [];
   public status: string[] = [];
+  public isLoading: boolean[] = [];
   private allEmployees: IEmployee[] = [];
 
   constructor(
@@ -35,9 +36,9 @@ export class EmployeesComponent implements OnInit {
       this.curPage = Math.min(this.curPage, this.maxPage);
       this.refresh();
       this.fg = new Array(this.perPage).fill(this.fb.group({
-        name: ['', Validators.required],
-        salary: ['', [Validators.required, Validators.pattern('\\d+\\.?\\d*')]],
-        age: ['', [Validators.required, Validators.pattern('\\d+')]],
+        employee_name: ['', Validators.required],
+        employee_salary: ['', [Validators.required, Validators.pattern('\\d+\\.?\\d*')]],
+        employee_age: ['', [Validators.required, Validators.pattern('\\d+')]],
       }));
     })
     .catch( err => {
@@ -49,6 +50,7 @@ export class EmployeesComponent implements OnInit {
   refresh(): void {
     this.isChanging = new Array(this.perPage).fill(false);
     this.status = new Array(this.perPage).fill(' ');
+    this.isLoading = new Array(this.perPage).fill(false);
   }
 
   get employees(): Array<IEmployee> {
@@ -59,9 +61,9 @@ export class EmployeesComponent implements OnInit {
     return Math.ceil(this.allEmployees.length / this.perPage);
   }
 
-  getfname( i: number ): FormControl {return this.fg[i].get('name') as FormControl};
-  getfsalary( i: number ): FormControl {return this.fg[i].get('salary') as FormControl};
-  getfage( i: number ): FormControl {return this.fg[i].get('age') as FormControl};
+  getfname( i: number ): FormControl {return this.fg[i].get('employee_name') as FormControl};
+  getfsalary( i: number ): FormControl {return this.fg[i].get('employee_salary') as FormControl};
+  getfage( i: number ): FormControl {return this.fg[i].get('employee_age') as FormControl};
 
   submit( id: number, i: number ): void {
     if( !this.status[i] ) return;
@@ -77,5 +79,15 @@ export class EmployeesComponent implements OnInit {
       })
     })
     .catch(() => (this.status[i] = "Failed"));
+  }
+
+  change( id: number, i: number ): void {
+    this.isLoading[i] = true;
+    this.empService.get(id)
+    .then( v => this.fg[i].patchValue(v))
+    .finally( () => {
+      this.isChanging[i] = true;
+      this.isLoading[i] = false;
+    });
   }
 }
