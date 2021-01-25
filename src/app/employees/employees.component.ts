@@ -16,6 +16,7 @@ export class EmployeesComponent implements OnInit {
   public isChanging: boolean[] = [];
   public status: string[] = [];
   public isLoading: boolean[] = [];
+  public deleteFailed: boolean[] = [];
   private allEmployees: IEmployee[] = [];
 
   constructor(
@@ -51,6 +52,7 @@ export class EmployeesComponent implements OnInit {
     this.isChanging = new Array(this.perPage).fill(false);
     this.status = new Array(this.perPage).fill(' ');
     this.isLoading = new Array(this.perPage).fill(false);
+    this.deleteFailed = new Array(this.perPage).fill(false);
   }
 
   get employees(): Array<IEmployee> {
@@ -88,6 +90,17 @@ export class EmployeesComponent implements OnInit {
     .finally( () => {
       this.isChanging[i] = true;
       this.isLoading[i] = false;
+    });
+  }
+
+  delete( id: number, i: number ) {
+    this.empService.delete(id)
+    .then(v => {
+      this.getData();
+    })
+    .catch( err => {
+      console.error(err);
+      this.deleteFailed[i] = true;
     });
   }
 }

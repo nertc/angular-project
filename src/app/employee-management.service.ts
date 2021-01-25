@@ -55,4 +55,13 @@ export class EmployeeManagementService {
       });
     });
   }
+
+  delete( id: number ): Promise<any> {
+    return new Promise((res, rej) => {
+      this.http.delete<IEmployee>(environment.url + 'delete/' + id).subscribe({
+        next: v => res(v),
+        error: err => rej(err)
+      });
+    });
+  }
 }

@@ -238,3 +238,10 @@ form {
 .hidden {
   display: none;
 }
+
+.error {
+  position: absolute;
+  left: 170px;
+  color: red;
+  bottom: 15px;
+}

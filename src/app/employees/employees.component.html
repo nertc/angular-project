@@ -6,9 +6,10 @@
         <h3><span>Name: </span>{{employee.employee_name}}</h3>
         <p><span>Salary: </span>{{employee.employee_salary}}</p>
         <p><span>Age: </span>{{employee.employee_age}}</p>
+        <p *ngIf="deleteFailed[i]" class="error">Failed</p>
         <div class="buttons">
           <button class="edit" (click)="change(employee.id, i)"><i class="las la-pen"></i>Edit</button>
-          <button class="delete"><i class="las la-trash-alt"></i>Delete</button>
+          <button class="delete" (click)="delete(employee.id, i)"><i class="las la-trash-alt"></i>Delete</button>
         </div>
       </div>
       <form class="change" [style]="'display: ' + (isChanging[i] ? 'block' : 'none')" [formGroup]="fg[i]" (ngSubmit)="submit(employee.id, i)">
