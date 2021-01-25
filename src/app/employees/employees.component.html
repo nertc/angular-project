@@ -2,26 +2,46 @@
   <ul class="employees" [style]="'grid-template-rows: repeat(' + (perPage / 2) + ', 1fr)'">
     <li class="employee" *ngFor="let employee of employees; index as i">
       <img [src]="employee.profile_image ? employee.profile_image : '../../assets/images/placeholder.png'" class="profile">
-      <div class="info">
+      <div class="info" [style]="'display: ' + (!isChanging[i] ? 'block' : 'none')" >
         <h3><span>Name: </span>{{employee.employee_name}}</h3>
         <p><span>Salary: </span>{{employee.employee_salary}}</p>
         <p><span>Age: </span>{{employee.employee_age}}</p>
         <div class="buttons">
-          <button class="edit"><i class="las la-pen"></i>Edit</button>
+          <button class="edit" (click)="isChanging[i] = true"><i class="las la-pen"></i>Edit</button>
           <button class="delete"><i class="las la-trash-alt"></i>Delete</button>
         </div>
       </div>
+      <form class="change" [style]="'display: ' + (isChanging[i] ? 'block' : 'none')" [formGroup]="fg[i]" (ngSubmit)="submit(employee.id, i)">
+        <label>
+          <h3>Name:</h3>
+          <input type="text" formControlName="name" [ngClass]="{invalid: getfname(i).invalid}">
+        </label>
+        <label>
+          <p>Salary:</p>
+          <input type="number" formControlName="salary" [ngClass]="{invalid: getfsalary(i).invalid}">
+        </label>
+        <label>
+          <p>Age:</p>
+          <input type="number" formControlName="age" [ngClass]="{invalid: getfage(i).invalid}">
+        </label>
+        <div class="info">
+          <p *ngIf="status[i]">{{status[i]}}</p>
+          <img src="../../assets/images/loading.svg" alt="Loading..." *ngIf="!status[i]">
+          <button type="reset" (click)="isChanging[i] = false; fg[i].reset(); status[i]=' '">Cancel</button>
+          <button type="submit" [disabled]="fg[i].invalid">Update</button>
+        </div>
+      </form>
     </li>
   </ul>
   <div class="tools">
     <ul class="pages">
-      <li class="page" (click)="curPage = (1 > curPage - 1 ? 1 : curPage - 1)" [ngClass]="{'disabled': 1 > curPage - 1}">
+      <li class="page" (click)="curPage = (1 > curPage - 1 ? 1 : curPage - 1); refresh()" [ngClass]="{'disabled': 1 > curPage - 1}">
         <p><i class="las la-angle-left"></i></p>
       </li>
-      <li class="page" *ngFor="let empty of pages; index as page" (click)="curPage = page + 1" [ngClass]="{'selected': curPage === page + 1 }">
+      <li class="page" *ngFor="let empty of pages; index as page" (click)="curPage = page + 1; refresh()" [ngClass]="{'selected': curPage === page + 1 }">
         <p>{{page + 1}}</p>
       </li>
-      <li class="page" (click)="curPage = (maxPage < curPage + 1 ? maxPage : curPage + 1)" [ngClass]="{'disabled': maxPage < curPage + 1}">
+      <li class="page" (click)="curPage = (maxPage < curPage + 1 ? maxPage : curPage + 1); refresh()" [ngClass]="{'disabled': maxPage < curPage + 1}">
         <p><i class="las la-angle-right"></i></p>
       </li>
     </ul>

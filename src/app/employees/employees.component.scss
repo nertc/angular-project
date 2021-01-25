@@ -71,17 +71,7 @@ $radius: 5px;
 
   border-radius: $radius;
   box-shadow: 0 0 11px 2px $outline-dark;
-}
 
-.profile {
-  height: 100%;
-  width: 100%;
-
-  border-top-left-radius: $radius;
-  border-bottom-left-radius: $radius;
-}
-
-.info {
   span {
     font-weight: 600;
     color: $outline-dark;
@@ -97,6 +87,14 @@ $radius: 5px;
     margin-top: 5px;
     font-size: 125%;
   }
+}
+
+.profile {
+  height: 100%;
+  width: 100%;
+
+  border-top-left-radius: $radius;
+  border-bottom-left-radius: $radius;
 }
 
 .buttons {
@@ -133,6 +131,94 @@ $radius: 5px;
             color: lime;
         }
         box-shadow: 0 0 5px $outline-dark;
+    }
+  }
+}
+
+form {
+  $padding-right: 15px;
+  padding-top: 10px;
+  padding-right: $padding-right;
+  width: 100%;
+  height: 100%;
+  position: relative;
+
+  label {
+    margin-top: 5px;
+    display: grid;
+    grid-template-columns: 77px auto;
+    width: 100%;
+    column-gap: 10px;
+    align-items: center;
+
+    h3, p {
+      margin: 0;
+      font-weight: 600;
+      color: $outline-dark;
+    }
+
+    input {
+      box-shadow: 0 0 11px 2px $outline-dark;
+      border-radius: 5px;
+      border: none;
+      width: 100%;
+      padding: 0 15px;
+      height: 25px;
+
+      &.invalid {
+        box-shadow: 0 0 10px red;
+      }
+
+      &::-webkit-inner-spin-button {
+          -webkit-appearance: none;
+      }
+    }
+  }
+
+  .info {
+    $height: 30px;
+    position: absolute;
+    right: $padding-right;
+    bottom: 10px;
+    width: 100%;
+    padding-left: 15px;
+    height: $height;
+
+    * {
+      position: relative;
+      top: $height / 2;
+      transform: translateY(-50%);
+    }
+
+    p {
+      float: left;
+      font-size: 100%;
+      color: $blue;
+      font-weight: 500;
+      line-height: $height;
+      height: 100%;
+    }
+
+    img {
+      float: left;
+      height: 50%;
+    }
+
+    button {
+      float: right;
+      border: none;
+      background-color: $blue;
+      color: white;
+      height: 100%;
+      padding: 0 15px;
+      border-radius: 5px;
+      letter-spacing: 0.5px;
+      transition: linear 0.25s;
+      margin-left: 5px;
+
+      &:disabled {
+          background-color: $outline-dark;
+      }
     }
   }
 }

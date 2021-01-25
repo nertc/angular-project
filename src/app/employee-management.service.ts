@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { Employee, GetEmployee } from './interfaces';
+import { IEmployee, IGetEmployee } from './interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -12,29 +12,46 @@ export class EmployeeManagementService {
     private http: HttpClient
   ) { }
 
-  add( employee: Employee ): Promise<Object> {
+  add( employee: IEmployee ): Promise<Object> {
     return new Promise((res, rej) => {
-      this.http.post<Employee>(environment.url + 'create', JSON.stringify(employee)).subscribe({
+      this.http.post<IEmployee>(environment.url + 'create', employee, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+        }
+      }).subscribe({
         next: v => res(v),
         error: err => rej(err)
       });
     });
   }
 
-  get( id: number ): Promise<Employee> {
+  get( id: number ): Promise<IGetEmployee> {
     return new Promise((res, rej) => {
-      this.http.get<Employee>(environment.url + 'employee/' + id).subscribe({
+      this.http.get<IGetEmployee>(environment.url + 'employee/' + id).subscribe({
         next: v => res('data' in v ? v['data'] : v),
         error: err => rej(err),
       });
     });
   }
 
-  getAll(): Promise<GetEmployee[]> {
+  getAll(): Promise<IGetEmployee[]> {
     return new Promise((res, rej) => {
-      this.http.get<GetEmployee[]>(environment.url + 'employees').subscribe({
+      this.http.get<IGetEmployee[]>(environment.url + 'employees').subscribe({
         next: v => res('data' in v ? v['data'] : v),
         error: err => rej(err),
+      });
+    });
+  }
+
+  update( id: number, employee: IEmployee ): Promise<Object> {
+    return new Promise((res, rej) => {
+      this.http.put<IEmployee>(environment.url + 'update/' + id, employee, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+        }
+      }).subscribe({
+        next: v => res(v),
+        error: err => rej(err)
       });
     });
   }

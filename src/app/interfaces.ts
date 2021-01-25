@@ -1,10 +1,10 @@
-export interface Employee {
+export interface IEmployee {
   "name": string,
   "salary": number,
   "age": number,
 }
 
-export interface GetEmployee {
+export interface IGetEmployee {
   "id": number,
   "employee_name": string,
   "employee_salary": number,
