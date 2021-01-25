@@ -1,0 +1,29 @@
+<div class="container">
+  <ul class="employees" [style]="'grid-template-rows: repeat(' + (perPage / 2) + ', 1fr)'">
+    <li class="employee" *ngFor="let employee of employees; index as i">
+      <img [src]="employee.profile_image ? employee.profile_image : '../../assets/images/placeholder.png'" class="profile">
+      <div class="info">
+        <h3><span>Name: </span>{{employee.employee_name}}</h3>
+        <p><span>Salary: </span>{{employee.employee_salary}}</p>
+        <p><span>Age: </span>{{employee.employee_age}}</p>
+        <div class="buttons">
+          <button class="edit"><i class="las la-pen"></i>Edit</button>
+          <button class="delete"><i class="las la-trash-alt"></i>Delete</button>
+        </div>
+      </div>
+    </li>
+  </ul>
+  <div class="tools">
+    <ul class="pages">
+      <li class="page" (click)="curPage = (1 > curPage - 1 ? 1 : curPage - 1)" [ngClass]="{'disabled': 1 > curPage - 1}">
+        <p><i class="las la-angle-left"></i></p>
+      </li>
+      <li class="page" *ngFor="let empty of pages; index as page" (click)="curPage = page + 1" [ngClass]="{'selected': curPage === page + 1 }">
+        <p>{{page + 1}}</p>
+      </li>
+      <li class="page" (click)="curPage = (maxPage < curPage + 1 ? maxPage : curPage + 1)" [ngClass]="{'disabled': maxPage < curPage + 1}">
+        <p><i class="las la-angle-right"></i></p>
+      </li>
+    </ul>
+  </div>
+</div>

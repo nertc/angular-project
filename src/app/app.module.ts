@@ -11,6 +11,7 @@ import { RouterModule } from '@angular/router';
 import { UsersListComponent } from './users-list/users-list.component';
 import { ExchangeComponent } from './exchange/exchange.component';
 import { EmployeeRegisterComponent } from './employee-register/employee-register.component';
+import { EmployeesComponent } from './employees/employees.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { EmployeeRegisterComponent } from './employee-register/employee-register
     RegistrationComponent,
     UsersListComponent,
     ExchangeComponent,
-    EmployeeRegisterComponent
+    EmployeeRegisterComponent,
+    EmployeesComponent
   ],
   imports: [
     BrowserModule,
@@ -27,11 +29,12 @@ import { EmployeeRegisterComponent } from './employee-register/employee-register
     ReactiveFormsModule,
     HttpClientModule,
     RouterModule.forRoot([
-      { path: '', component: RegistrationComponent },
-      { path: 'users', component: UsersListComponent },
-      { path: 'edit/:userId', component: RegistrationComponent },
+      { path: '', component: RegistrationComponent},
+      { path: 'users', component: UsersListComponent},
+      { path: 'edit/:userId', component: RegistrationComponent},
       { path: 'exchange', component: ExchangeComponent},
-      { path: 'employee/register', component: EmployeeRegisterComponent}
+      { path: 'employee/register', component: EmployeeRegisterComponent},
+      { path: 'employee', component: EmployeesComponent},
     ])
   ],
   providers: [],

@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Employee } from './interfaces';
+import { environment } from 'src/environments/environment';
+import { Employee, GetEmployee } from './interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,7 @@ export class EmployeeManagementService {
 
   add( employee: Employee ): Promise<Object> {
     return new Promise((res, rej) => {
-      this.http.post<Employee>('http://dummy.restapiexample.com/api/v1/create', JSON.stringify(employee)).subscribe({
+      this.http.post<Employee>(environment.url + 'create', JSON.stringify(employee)).subscribe({
         next: v => res(v),
         error: err => rej(err)
       });
@@ -22,9 +23,18 @@ export class EmployeeManagementService {
 
   get( id: number ): Promise<Employee> {
     return new Promise((res, rej) => {
-      this.http.get<Employee>('http://dummy.restapiexample.com/api/v1/employee/' + id).subscribe({
+      this.http.get<Employee>(environment.url + 'employee/' + id).subscribe({
         next: v => res('data' in v ? v['data'] : v),
-        error: err => rej(err)
+        error: err => rej(err),
+      });
+    });
+  }
+
+  getAll(): Promise<GetEmployee[]> {
+    return new Promise((res, rej) => {
+      this.http.get<GetEmployee[]>(environment.url + 'employees').subscribe({
+        next: v => res('data' in v ? v['data'] : v),
+        error: err => rej(err),
       });
     });
   }
