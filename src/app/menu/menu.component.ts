@@ -11,7 +11,7 @@ export class MenuComponent implements OnInit {
     { icon: "las la-users", title: "List of Users", router: ['/users']},
     { icon: "las la-exchange-alt", title: "Exchange", router: ['/exchange']},
     { icon: "las la-plus-circle", title: "New Employee", router: ['/employee/register']},
-    { icon: "las la-user-friends", title: "Employees", router: ['/employee']},
+    { icon: "las la-user-friends", title: "Employees", router: ['/employees']},
   ];
 
   constructor() { }

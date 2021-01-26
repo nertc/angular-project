@@ -14,11 +14,7 @@ export class EmployeeManagementService {
 
   add( employee: IEmployee ): Promise<Object> {
     return new Promise((res, rej) => {
-      this.http.post<IEmployee>(environment.url + 'create', employee, {
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
-        }
-      }).subscribe({
+      this.http.post<IEmployee>(environment.url + 'create', employee).subscribe({
         next: v => res(v),
         error: err => rej(err)
       });
@@ -45,11 +41,7 @@ export class EmployeeManagementService {
 
   update( id: number, employee: IEmployee ): Promise<Object> {
     return new Promise((res, rej) => {
-      this.http.put<IEmployee>(environment.url + 'update/' + id, employee, {
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
-        }
-      }).subscribe({
+      this.http.put<IEmployee>(environment.url + 'update/' + id, employee).subscribe({
         next: v => res(v),
         error: err => rej(err)
       });

@@ -1,5 +1,5 @@
 <div class="container">
-  <ul class="employees" [style]="'grid-template-rows: repeat(' + (perPage / 2) + ', 1fr)'">
+  <ul class="employees">
     <li class="employee" *ngFor="let employee of employees; index as i">
       <img [src]="employee.profile_image ? employee.profile_image : '../../assets/images/placeholder.png'" [ngClass]="{'profile': true, 'loading': isLoading[i]}">
       <div [ngClass]="{'info': true, 'loading': isLoading[i]}" [style]="'display: ' + (!isChanging[i] ? 'block' : 'none')" >
@@ -8,6 +8,7 @@
         <p><span>Age: </span>{{employee.employee_age}}</p>
         <p *ngIf="deleteFailed[i]" class="error">Failed</p>
         <div class="buttons">
+          <button class="more" [routerLink]="['/employees', employee.id]"><i class="las la-eye"></i>More</button>
           <button class="edit" (click)="change(employee.id, i)"><i class="las la-pen"></i>Edit</button>
           <button class="delete" (click)="delete(employee.id, i)"><i class="las la-trash-alt"></i>Delete</button>
         </div>
@@ -15,15 +16,15 @@
       <form class="change" [style]="'display: ' + (isChanging[i] ? 'block' : 'none')" [formGroup]="fg[i]" (ngSubmit)="submit(employee.id, i)">
         <label>
           <h3>Name:</h3>
-          <input type="text" formControlName="employee_name" [ngClass]="{invalid: getfname(i).invalid}">
+          <input type="text" formControlName="name" [ngClass]="{invalid: getfname(i)?.invalid}">
         </label>
         <label>
           <p>Salary:</p>
-          <input type="number" formControlName="employee_salary" [ngClass]="{invalid: getfsalary(i).invalid}">
+          <input type="number" formControlName="salary" [ngClass]="{invalid: getfsalary(i)?.invalid}">
         </label>
         <label>
           <p>Age:</p>
-          <input type="number" formControlName="employee_age" [ngClass]="{invalid: getfage(i).invalid}">
+          <input type="number" formControlName="age" [ngClass]="{invalid: getfage(i)?.invalid}">
         </label>
         <div class="info">
           <p *ngIf="status[i]">{{status[i]}}</p>
@@ -36,16 +37,19 @@
     </li>
   </ul>
   <div class="tools">
+    <button class="refresh" (click)="getData()"><i class="las la-sync-alt"></i></button>
     <ul class="pages">
-      <li class="page" (click)="curPage = (1 > curPage - 1 ? 1 : curPage - 1); refresh()" [ngClass]="{'disabled': 1 > curPage - 1}">
-        <p><i class="las la-angle-left"></i></p>
+      <li (click)="curPage = (1 > curPage - 1 ? 1 : curPage - 1); refresh()">
+        <p class="page" [ngClass]="{'disabled': 1 > curPage - 1}"><i class="las la-angle-left"></i></p>
       </li>
-      <li class="page" *ngFor="let empty of pages; index as page" (click)="curPage = page + 1; refresh()" [ngClass]="{'selected': curPage === page + 1 }">
-        <p>{{page + 1}}</p>
+      <li *ngFor="let empty of pages; index as page" (click)="curPage = page + 1; refresh()">
+        <p class="page" *ngIf="pageIsShown(page + 1)" [ngClass]="{'selected': curPage === page + 1 }">{{page + 1}}</p>
+        <p class="page" *ngIf="!pageIsShown(page + 1) && ((page + 1 === 3 && curPage > 5) || (page + 1 === maxPage - 2 && curPage < maxPage - 4))"><i class="las la-ellipsis-h"></i></p>
       </li>
-      <li class="page" (click)="curPage = (maxPage < curPage + 1 ? maxPage : curPage + 1); refresh()" [ngClass]="{'disabled': maxPage < curPage + 1}">
-        <p><i class="las la-angle-right"></i></p>
+      <li (click)="curPage = (maxPage < curPage + 1 ? maxPage : curPage + 1); refresh()">
+        <p class="page" [ngClass]="{'disabled': maxPage < curPage + 1}"><i class="las la-angle-right"></i></p>
       </li>
     </ul>
+    <!-- <input type="number" pattern="\d+" (input)="$changePerPage.next($event.target.value)" placeholder="Employee per page (Max 8)" [ngClass]="{'rotating': isLoadingMain}"> -->
   </div>
 </div>

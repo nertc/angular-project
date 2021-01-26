@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Subject } from 'rxjs';
 import { EmployeeManagementService } from '../employee-management.service';
 import { IGetEmployee as IEmployee } from '../interfaces';
 
@@ -16,7 +17,9 @@ export class EmployeesComponent implements OnInit {
   public isChanging: boolean[] = [];
   public status: string[] = [];
   public isLoading: boolean[] = [];
+  public isLoadingMain: boolean = false;
   public deleteFailed: boolean[] = [];
+  public $changePerPage = new Subject<number>();
   private allEmployees: IEmployee[] = [];
 
   constructor(
@@ -26,21 +29,38 @@ export class EmployeesComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.$changePerPage.subscribe({
+      next: v => {
+        if( !v ) return;
+        if( v > 8 ) v = 8;
+        this.perPage = v;
+        this.pages = new Array(this.maxPage);
+        this.curPage = Math.min(this.curPage, this.maxPage);
+        this.refresh();
+      }
+    });
     this.getData();
   }
 
-  private getData(): void {
+  getData(): void {
+    console.log('start');
+    this.isLoadingMain = true;
     this.empService.getAll()
     .then( v => {
       this.allEmployees = v;
       this.pages = new Array(this.maxPage);
       this.curPage = Math.min(this.curPage, this.maxPage);
       this.refresh();
-      this.fg = new Array(this.perPage).fill(this.fb.group({
-        employee_name: ['', Validators.required],
-        employee_salary: ['', [Validators.required, Validators.pattern('\\d+\\.?\\d*')]],
-        employee_age: ['', [Validators.required, Validators.pattern('\\d+')]],
-      }));
+      const temp = [];
+      for( let i = 0; i < this.perPage; ++i )
+        temp.push(this.fb.group({
+          name: ['', Validators.required],
+          salary: ['', [Validators.required, Validators.pattern('\\d+\\.?\\d*')]],
+          age: ['', [Validators.required, Validators.pattern('\\d+')]],
+        }));
+      this.fg = temp;
+      this.isLoadingMain = false;
+      console.log('end');
     })
     .catch( err => {
       console.error(err);
@@ -63,9 +83,9 @@ export class EmployeesComponent implements OnInit {
     return Math.ceil(this.allEmployees.length / this.perPage);
   }
 
-  getfname( i: number ): FormControl {return this.fg[i].get('employee_name') as FormControl};
-  getfsalary( i: number ): FormControl {return this.fg[i].get('employee_salary') as FormControl};
-  getfage( i: number ): FormControl {return this.fg[i].get('employee_age') as FormControl};
+  getfname( i: number ): FormControl {return this.fg[i].get('name') as FormControl};
+  getfsalary( i: number ): FormControl {return this.fg[i].get('salary') as FormControl};
+  getfage( i: number ): FormControl {return this.fg[i].get('age') as FormControl};
 
   submit( id: number, i: number ): void {
     if( !this.status[i] ) return;
@@ -79,6 +99,11 @@ export class EmployeesComponent implements OnInit {
         console.error(err);
         this.getData();
       })
+      .finally(() => {
+        this.isChanging[i] = false;
+        this.isLoading[i] = false;
+        this.status[i] = " ";
+      })
     })
     .catch(() => (this.status[i] = "Failed"));
   }
@@ -86,11 +111,26 @@ export class EmployeesComponent implements OnInit {
   change( id: number, i: number ): void {
     this.isLoading[i] = true;
     this.empService.get(id)
-    .then( v => this.fg[i].patchValue(v))
+    .then( v => this.fg[i].patchValue({
+      name: v.employee_name,
+      salary: v.employee_salary,
+      age: v.employee_age
+    }))
+    .catch(() => this.tryChange(id, i))
     .finally( () => {
       this.isChanging[i] = true;
       this.isLoading[i] = false;
     });
+  }
+
+  private tryChange( id: number, i: number ): void {
+    this.empService.get(id)
+    .then( v => this.fg[i].patchValue({
+      name: v.employee_name,
+      salary: v.employee_salary,
+      age: v.employee_age
+    }))
+    .catch(() => this.tryChange(id, i));
   }
 
   delete( id: number, i: number ) {
@@ -102,5 +142,9 @@ export class EmployeesComponent implements OnInit {
       console.error(err);
       this.deleteFailed[i] = true;
     });
+  }
+
+  pageIsShown( page: number ): boolean {
+    return page <= 2 || page >= this.maxPage - 1 || (page >= this.curPage - 2 && page <= this.curPage + 2) || (this.curPage < 6 && page <= 8) || (this.curPage > this.maxPage - 5 && page >= this.maxPage - 7);
   }
 }

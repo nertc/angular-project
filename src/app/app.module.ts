@@ -12,6 +12,7 @@ import { UsersListComponent } from './users-list/users-list.component';
 import { ExchangeComponent } from './exchange/exchange.component';
 import { EmployeeRegisterComponent } from './employee-register/employee-register.component';
 import { EmployeesComponent } from './employees/employees.component';
+import { EmployeeComponent } from './employee/employee.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { EmployeesComponent } from './employees/employees.component';
     UsersListComponent,
     ExchangeComponent,
     EmployeeRegisterComponent,
-    EmployeesComponent
+    EmployeesComponent,
+    EmployeeComponent
   ],
   imports: [
     BrowserModule,
@@ -34,7 +36,8 @@ import { EmployeesComponent } from './employees/employees.component';
       { path: 'edit/:userId', component: RegistrationComponent},
       { path: 'exchange', component: ExchangeComponent},
       { path: 'employee/register', component: EmployeeRegisterComponent},
-      { path: 'employee', component: EmployeesComponent},
+      { path: 'employees', component: EmployeesComponent},
+      { path: 'employees/:id', component: EmployeeComponent},
     ])
   ],
   providers: [],
