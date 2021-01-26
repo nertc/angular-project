@@ -34,9 +34,7 @@ export class EmployeesComponent implements OnInit {
         if( !v ) return;
         if( v > 8 ) v = 8;
         this.perPage = v;
-        this.pages = new Array(this.maxPage);
-        this.curPage = Math.min(this.curPage, this.maxPage);
-        this.refresh();
+        this.restart();
       }
     });
     this.getData();
@@ -47,23 +45,27 @@ export class EmployeesComponent implements OnInit {
     this.empService.getAll()
     .then( v => {
       this.allEmployees = v;
-      this.pages = new Array(this.maxPage);
-      this.curPage = Math.min(this.curPage, this.maxPage);
-      this.refresh();
-      const temp = [];
-      for( let i = 0; i < this.perPage; ++i )
-        temp.push(this.fb.group({
-          name: ['', Validators.required],
-          salary: ['', [Validators.required, Validators.pattern('\\d+\\.?\\d*')]],
-          age: ['', [Validators.required, Validators.pattern('\\d+')]],
-        }));
-      this.fg = temp;
+      this.restart();
       this.isLoadingMain = false;
     })
     .catch( err => {
       console.error(err);
       this.getData();
     });
+  }
+
+  restart(): void {
+    this.pages = new Array(this.maxPage);
+    this.curPage = Math.min(this.curPage, this.maxPage);
+    this.refresh();
+    const temp = [];
+    for( let i = 0; i < this.perPage; ++i )
+      temp.push(this.fb.group({
+        name: ['', Validators.required],
+        salary: ['', [Validators.required, Validators.pattern('\\d+\\.?\\d*')]],
+        age: ['', [Validators.required, Validators.pattern('\\d+')]],
+      }));
+    this.fg = temp;
   }
 
   refresh(): void {
@@ -108,6 +110,7 @@ export class EmployeesComponent implements OnInit {
 
   change( id: number, i: number ): void {
     this.isLoading[i] = true;
+    this.status[i] = " ";
     this.empService.get(id)
     .then( v => this.fg[i].patchValue({
       name: v.employee_name,

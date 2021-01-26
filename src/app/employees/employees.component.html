@@ -50,6 +50,6 @@
         <p class="page" [ngClass]="{'disabled': maxPage < curPage + 1}"><i class="las la-angle-right"></i></p>
       </li>
     </ul>
-    <!-- <input type="number" pattern="\d+" (input)="$changePerPage.next($event.target.value)" placeholder="Employee per page (Max 8)" [ngClass]="{'rotating': isLoadingMain}"> -->
+    <input type="number" pattern="\d+" (input)="$changePerPage.next($event.target.value)" placeholder="Employee per page (Max 8)" [ngClass]="{'rotating': isLoadingMain}">
   </div>
 </div>
