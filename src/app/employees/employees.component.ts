@@ -19,7 +19,7 @@ export class EmployeesComponent implements OnInit {
   public isLoading: boolean[] = [];
   public isLoadingMain: boolean = false;
   public deleteFailed: boolean[] = [];
-  public $changePerPage = new Subject<number>();
+  public $changePerPage = new Subject<any>();
   private allEmployees: IEmployee[] = [];
 
   constructor(
@@ -31,6 +31,7 @@ export class EmployeesComponent implements OnInit {
   ngOnInit(): void {
     this.$changePerPage.subscribe({
       next: v => {
+        v = v.value ?? null;
         if( !v ) return;
         if( v > 8 ) v = 8;
         this.perPage = v;
