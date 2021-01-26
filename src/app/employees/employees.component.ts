@@ -43,7 +43,6 @@ export class EmployeesComponent implements OnInit {
   }
 
   getData(): void {
-    console.log('start');
     this.isLoadingMain = true;
     this.empService.getAll()
     .then( v => {
@@ -60,7 +59,6 @@ export class EmployeesComponent implements OnInit {
         }));
       this.fg = temp;
       this.isLoadingMain = false;
-      console.log('end');
     })
     .catch( err => {
       console.error(err);
