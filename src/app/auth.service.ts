@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { BurgerService } from './burger.service';
 import { User } from './interfaces';
 import { MathService } from './math.service';
 import { UsersService } from './users.service';
@@ -15,6 +16,7 @@ export class AuthService {
     private userService: UsersService,
     private encryptionService: MathService,
     private router: Router,
+    private burgerService: BurgerService,
   ) { }
 
   private get token(): string {
@@ -54,6 +56,7 @@ export class AuthService {
 
   logout(): void {
     this.token = "";
+    this.burgerService.small = false;
     this.router.navigate(['/login']);
   }
 }

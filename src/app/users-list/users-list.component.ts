@@ -12,7 +12,7 @@ export class UsersListComponent implements OnInit {
 
   constructor(
     private usersService: UsersService,
-    private authService: AuthService,
+    public authService: AuthService,
     private router: Router,
   ) { }
 

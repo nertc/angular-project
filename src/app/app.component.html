@@ -1,8 +1,8 @@
 <div class="root-container">
-  <app-menu [smallView]="burgerSmall && authService.loggedIn"></app-menu>
+  <app-menu></app-menu>
 
   <div class="right-container">
-    <app-topbar (burgerEvent)="onBurgerEvent($event)" *ngIf="authService.loggedIn"></app-topbar>
+    <app-topbar *ngIf="authService.loggedIn"></app-topbar>
     <div class="content-container">
       <router-outlet></router-outlet>
     </div>

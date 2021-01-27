@@ -1,5 +1,5 @@
 <div class="topbar">
-  <button class="burger" (click)="$burgerClicked.next()" [style]="'transform: rotate(' + (burgerClicked ? 90 : 0) + 'deg)'">
+  <button class="burger" (click)="burgerService.small = !burgerService.small" [style]="'transform: rotate(' + (burgerService.small ? 90 : 0) + 'deg)'">
     <i class="las la-bars"></i>
   </button>
   <div class="info">

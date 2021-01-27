@@ -8,13 +8,8 @@ import { AuthService } from './auth.service';
 })
 export class AppComponent {
   title = 'angular-project';
-  burgerSmall: boolean = false;
 
   constructor(
     public authService: AuthService,
   ) { }
-
-  onBurgerEvent( val: boolean ) {
-    this.burgerSmall = val;
-  }
 }

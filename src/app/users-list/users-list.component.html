@@ -10,8 +10,8 @@
         <ul>
             <li *ngFor="let user of usersData">
                 <p *ngFor="let item of user">{{item}}</p>
-                <div><button (click)="delete(user[0])" class="delete"><i class="las la-trash-alt"></i></button></div>
-                <div><button [routerLink]="['/edit', user[0]]" class="edit"><i class="las la-pen"></i></button></div>
+                <div *ngIf="user[0] === authService.id"><button (click)="delete(user[0])" class="delete"><i class="las la-trash-alt"></i></button></div>
+                <div *ngIf="user[0] === authService.id"><button [routerLink]="['/edit', user[0]]" class="edit"><i class="las la-pen"></i></button></div>
             </li>
         </ul>
     </div>

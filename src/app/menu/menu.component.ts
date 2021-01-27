@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { BurgerService } from '../burger.service';
 
 @Component({
   selector: 'app-menu',
@@ -6,8 +7,6 @@ import { Component, Input, OnInit } from '@angular/core';
   styleUrls: ['./menu.component.scss']
 })
 export class MenuComponent implements OnInit {
-  @Input() smallView: boolean = false;
-
   menuItems: Array<{ icon: string, title: string, router: Array<string> }> = [
     { icon: "las la-sign-in-alt", title: "Log In", router: ['/login']},
     { icon: "las la-user-plus", title: "Registration", router: ['/']},
@@ -17,7 +16,9 @@ export class MenuComponent implements OnInit {
     { icon: "las la-user-friends", title: "Employees", router: ['/employees']},
   ];
 
-  constructor() { }
+  constructor(
+    public burgerService: BurgerService,
+  ) { }
 
   ngOnInit(): void {
   }
