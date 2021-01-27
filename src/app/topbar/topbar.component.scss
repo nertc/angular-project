@@ -1,0 +1,48 @@
+@import '/src/assets/styles/fonts', '/src/assets/styles/palette';
+
+.topbar {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 50px;
+  box-shadow: 0px 0px 10px 2px $outline;
+}
+
+.navigation {
+  $size: 40px;
+  background-color: $blue;
+  border: none;
+  height: $size;
+  width: $size;
+  border-radius: 50%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  margin-right: 5px;
+  font-size: 120%;
+  color: $white;
+}
+
+.info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  p {
+    margin-right: 20px;
+    font-weight: $medium;
+    font-size: 110%;
+  }
+}
+
+.burger {
+  background-color: transparent;
+  border: none;
+  font-size: 200%;
+  color: $blue;
+
+  transition: linear 0.15s;
+}

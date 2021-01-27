@@ -1,11 +1,11 @@
 <div class="container">
     <h2><i class="lab la-angular"></i></h2>
-    <h1><span>Angular</span> project</h1>
-    
+    <h1 [ngClass]="{'no-display': smallView}"><span>Angular</span> project</h1>
+
     <div class="buttons" *ngFor="let item of menuItems">
-        <button [routerLink]="item.router"><i [class]="item.icon"></i>{{item.title}}</button>
+        <button [routerLink]="item.router"><i [class]="item.icon" [ngStyle]="{'font-size': smallView ? '150%' : null}"></i><span [ngClass]="{'no-display': smallView}">{{item.title}}</span></button>
     </div>
-    
+
     <footer>
         <p>© David Tsiklauri 2021</p>
     </footer>

@@ -15,6 +15,7 @@ import { EmployeesComponent } from './employees/employees.component';
 import { EmployeeComponent } from './employee/employee.component';
 import { LoginComponent } from './login/login.component';
 import { LoginGuard } from './login.guard';
+import { TopbarComponent } from './topbar/topbar.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { LoginGuard } from './login.guard';
     EmployeeRegisterComponent,
     EmployeesComponent,
     EmployeeComponent,
-    LoginComponent
+    LoginComponent,
+    TopbarComponent
   ],
   imports: [
     BrowserModule,

@@ -68,6 +68,9 @@ export class LoginComponent implements OnInit {
         case 'minlength':
           this.infoText = `Length of the ${controlName} must be more than or equal to ${control.errors.minlength.requiredLength}`;
           break;
+        case 'pattern':
+          this.infoText = `Password is not compatible`;
+          break;
         default:
           this.infoText = `Something went wrong! Please, try again`
           break;

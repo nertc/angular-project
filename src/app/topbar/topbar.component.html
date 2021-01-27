@@ -1,0 +1,10 @@
+<div class="topbar">
+  <button class="burger" (click)="$burgerClicked.next()" [style]="'transform: rotate(' + (burgerClicked ? 90 : 0) + 'deg)'">
+    <i class="las la-bars"></i>
+  </button>
+  <div class="info">
+    <p>{{nickname}}</p>
+    <button [routerLink]="['/users']" class="navigation"><i class="las la-users"></i></button>
+    <button (click)="logout()" class="navigation"><i class="las la-sign-out-alt"></i></button>
+  </div>
+</div>
