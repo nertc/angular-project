@@ -1,0 +1,82 @@
+@import "/src/assets/styles/fonts", "/src/assets/styles/palette";
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+h2 {
+  color: $blue;
+  font-weight: 600;
+  font-size: 300%;
+  margin-bottom: 40px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  height: 150px;
+  width: 500px;
+}
+
+input {
+  border-radius: 5px;
+  border: 1px solid $outline-dark;
+  outline: none;
+  padding: 0 15px;
+  height: 35px;
+
+  &::placeholder {
+    color: $outline-dark;
+    font-weight: $medium;
+  }
+
+  &.invalid {
+    box-shadow: 0 0 5px red;
+  }
+}
+
+.buttons {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+button {
+  border: none;
+  background-color: $blue;
+  color: white;
+  width: 48%;
+  height: 40px;
+  border-radius: 5px;
+  letter-spacing: 0.5px;
+  transition: linear 0.25s;
+
+  &:disabled {
+    background-color: $outline-dark;
+  }
+}
+
+.info {
+  max-width: 637px;
+  text-align: center;
+  margin-top: 40px;
+  color: $blue;
+  font-weight: $medium;
+  font-size: 110%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.invisible {
+  opacity: 0;
+  pointer-events: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}

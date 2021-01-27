@@ -13,6 +13,8 @@ import { ExchangeComponent } from './exchange/exchange.component';
 import { EmployeeRegisterComponent } from './employee-register/employee-register.component';
 import { EmployeesComponent } from './employees/employees.component';
 import { EmployeeComponent } from './employee/employee.component';
+import { LoginComponent } from './login/login.component';
+import { LoginGuard } from './login.guard';
 
 @NgModule({
   declarations: [
@@ -23,7 +25,8 @@ import { EmployeeComponent } from './employee/employee.component';
     ExchangeComponent,
     EmployeeRegisterComponent,
     EmployeesComponent,
-    EmployeeComponent
+    EmployeeComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
@@ -32,12 +35,14 @@ import { EmployeeComponent } from './employee/employee.component';
     HttpClientModule,
     RouterModule.forRoot([
       { path: '', component: RegistrationComponent},
-      { path: 'users', component: UsersListComponent},
-      { path: 'edit/:userId', component: RegistrationComponent},
+      { path: 'users', component: UsersListComponent, canActivate: [LoginGuard]},
+      { path: 'edit/:userId', component: RegistrationComponent, canActivate: [LoginGuard]},
       { path: 'exchange', component: ExchangeComponent},
       { path: 'employee/register', component: EmployeeRegisterComponent},
       { path: 'employees', component: EmployeesComponent},
       { path: 'employees/:id', component: EmployeeComponent},
+      { path: 'login', component: LoginComponent},
+      { path: '**', redirectTo: 'login'}
     ])
   ],
   providers: [],

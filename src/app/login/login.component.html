@@ -1,0 +1,12 @@
+<div class="container">
+  <h2>WELCOME</h2>
+  <form [formGroup]="form">
+    <input type="email" formControlName="email" [ngClass]="{invalid: !isValidNotRequired(femail)}" placeholder="E-mail">
+    <input type="password" formControlName="password" [ngClass]="{invalid: !isValidNotRequired(fpassword)}" placeholder="Password">
+    <div class="buttons">
+      <button [disabled]="form.invalid" (click)="login()">Login</button>
+      <button [routerLink]="['']">Register</button>
+    </div>
+  </form>
+  <p class="info">{{infoText}}<span class="invisible">|</span></p>
+</div>

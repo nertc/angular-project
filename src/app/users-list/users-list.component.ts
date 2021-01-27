@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UsersService, User, UserProperty } from '../users.service';
+import { UsersService } from '../users.service';
 
 @Component({
   selector: 'app-users-list',
@@ -18,7 +18,7 @@ export class UsersListComponent implements OnInit {
   get usersData(): Array<string[]> {
     const map = this.usersService.getUsers();
     const output: Array<string[]> = [];
-    
+
     map.forEach( (user, id) => {
       const temp: string[] = [];
       temp.push(id.toString());

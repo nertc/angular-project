@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { User } from '../interfaces';
 import { MathService } from '../math.service';
-import { User, UsersService } from '../users.service';
+import { UsersService } from '../users.service';
 
 @Component({
   selector: 'app-registration',
@@ -21,7 +22,8 @@ export class RegistrationComponent implements OnInit {
     private fb: FormBuilder,
     private mathService: MathService,
     private usersService: UsersService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router,
   ) {
   }
 
@@ -95,6 +97,7 @@ export class RegistrationComponent implements OnInit {
         this.usersService.addUser(user);
         this.infoText = "Successful registration !";
       }
+      this.router.navigate(['/users']);
     } else {
       this.validate();
     }
@@ -106,7 +109,7 @@ export class RegistrationComponent implements OnInit {
     for( let controlName of Object.getOwnPropertyNames(controls) ) {
       const control: AbstractControl = controls[controlName];
       if( control.valid || !control.errors ) continue;
-      
+
       switch( Object.getOwnPropertyNames(control.errors)[0] ) {
         case 'required':
           this.infoText = `Fields with asterisk(*) are required`;
@@ -129,7 +132,7 @@ export class RegistrationComponent implements OnInit {
 
   isValidNotRequired( controlName: string ): boolean {
     const control = this.form.get(controlName);
-    
+
     if( control?.valid ) return true;
     const errors = Object.getOwnPropertyNames(control?.errors);
     if( errors.length !== 1 ) return true;

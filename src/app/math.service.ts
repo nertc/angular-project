@@ -41,7 +41,7 @@ export class MathService {
 
     return [this.encryptionAlgorithm(text, e, n), e, n];
   }
-  
+
   private encryptionAlgorithm( text: string, e: number, n: number ): string {
     let output = "";
     for( let i = 0; i < text.length; ++i ) {
