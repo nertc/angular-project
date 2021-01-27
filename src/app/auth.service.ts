@@ -19,7 +19,7 @@ export class AuthService {
     let token = localStorage.getItem(this.key) ?? "";
     if( token !== "" && this.userService.getUser(Number(token)) === undefined ) {
       token = "";
-      this.token = "";
+      this.logout();
     }
 
     return token;
@@ -48,5 +48,9 @@ export class AuthService {
 
     this.token = userId.toString();
     return true;
+  }
+
+  logout(): void {
+    this.token = "";
   }
 }

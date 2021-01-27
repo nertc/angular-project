@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { AuthService } from '../auth.service';
 import { UsersService } from '../users.service';
 
 @Component({
@@ -9,7 +11,9 @@ import { UsersService } from '../users.service';
 export class UsersListComponent implements OnInit {
 
   constructor(
-    private usersService: UsersService
+    private usersService: UsersService,
+    private authService: AuthService,
+    private router: Router,
   ) { }
 
   ngOnInit(): void {
@@ -43,5 +47,10 @@ export class UsersListComponent implements OnInit {
         alert('Error occured');
       }
     }
+  }
+
+  logout(): void {
+    this.authService.logout();
+    this.router.navigate(['/login']);
   }
 }

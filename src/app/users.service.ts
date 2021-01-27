@@ -10,7 +10,6 @@ export class UsersService {
   userProperties: Array<UserProperty> = ['email', 'password', 'nickname', 'phone', 'website']
 
   constructor() {
-    // this.forTesting();
     this.users = new Map([
       [0, {
         email: 'davidtsiklauri7@gmail.com',
@@ -37,6 +36,7 @@ export class UsersService {
         passwordKeys: [1407237466687, 1602254288287],
       }]
     ]);
+    // this.forTesting();
     this.id = this.users.size;
   }
 
