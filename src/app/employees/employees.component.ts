@@ -1,13 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Subject } from 'rxjs';
+import { appear } from '../animations';
 import { EmployeeManagementService } from '../employee-management.service';
 import { IGetEmployee as IEmployee } from '../interfaces';
+import { PopupService } from '../popup.service';
 
 @Component({
   selector: 'app-employees',
   templateUrl: './employees.component.html',
-  styleUrls: ['./employees.component.scss']
+  styleUrls: ['./employees.component.scss'],
+  animations: [
+    appear
+  ]
 })
 export class EmployeesComponent implements OnInit {
   public fg: FormGroup[] = [];
@@ -24,7 +29,8 @@ export class EmployeesComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private empService: EmployeeManagementService
+    private empService: EmployeeManagementService,
+    private popupSevice: PopupService,
   ) {
   }
 
@@ -135,15 +141,21 @@ export class EmployeesComponent implements OnInit {
     .catch(() => this.tryChange(id, i));
   }
 
-  delete( id: number, i: number ) {
-    this.empService.delete(id)
-    .then(v => {
-      this.getData();
-    })
-    .catch( err => {
-      console.error(err);
-      this.deleteFailed[i] = true;
-    });
+  delete( id: number, i: number, name: string ) {
+    this.popupSevice.create(`This action will remove a user with this name: ${name}\nAre you sure?`).subscribe(
+      v => {
+        if( v ) {
+          this.empService.delete(id)
+          .then(v => {
+            this.getData();
+          })
+          .catch( err => {
+            console.error(err);
+            this.deleteFailed[i] = true;
+          });
+        }
+      }
+    )
   }
 
   pageIsShown( page: number ): boolean {

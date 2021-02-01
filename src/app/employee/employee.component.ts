@@ -1,13 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { appear } from '../animations';
 import { EmployeeManagementService } from '../employee-management.service';
 import { IGetEmployee as Employee } from '../interfaces';
+import { PopupService } from '../popup.service';
 
 @Component({
   selector: 'app-employee',
   templateUrl: './employee.component.html',
-  styleUrls: ['./employee.component.scss']
+  styleUrls: ['./employee.component.scss'],
+  animations: [
+    appear
+  ]
 })
 export class EmployeeComponent implements OnInit {
   employee: Employee = {id:-1,employee_name:'',employee_age:-1,employee_salary:-1};
@@ -19,7 +24,8 @@ export class EmployeeComponent implements OnInit {
     private empService: EmployeeManagementService,
     private route: ActivatedRoute,
     private fb: FormBuilder,
-    private router: Router
+    private router: Router,
+    private popupService: PopupService,
   ) {
     this.fg = this.fb.group({
       name: ['', Validators.required],
@@ -69,16 +75,20 @@ export class EmployeeComponent implements OnInit {
     });
   }
 
-  delete() {
-    if( !this.status ) return;
-    this.status = "";
-    this.empService.delete(this.employee.id)
-    .then(() => {
-      this.status = "Successfully deleted";
-      this.router.navigate(['/employees']);
-    })
-    .catch(() => {
-      this.status = "Delete has failed! Please try again";
-    });
+  delete( name: string ) {
+    this.popupService.create(`This action will remove a user with this name: ${name}\nAre you sure?`).subscribe(
+      v => {
+        if(!v) return;
+        if( !this.status ) return;
+        this.status = "";
+        this.empService.delete(this.employee.id)
+        .then(() => {
+          this.status = "Successfully deleted";
+          this.router.navigate(['/employees']);
+        })
+        .catch(() => {
+          this.status = "Delete has failed! Please try again";
+        });
+      });
   }
 }

@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container" @appear>
   <form class="data" [formGroup]="fg" [style]="loaded ? '' : 'filter: blur(3px);'">
     <div class="pic">
       <img [src]="employee.profile_image ? employee.profile_image : '../../assets/images/placeholder.png'" alt="Profile Picture">
@@ -16,7 +16,7 @@
       <input type="number" formControlName="age" [ngClass]="{invalid: !isValidNotRequired(fage)}">
     </label>
     <button (click)="update()" [disabled]="fg.invalid">Update</button>
-    <button (click)="delete()">Delete</button>
+    <button (click)="delete(employee.employee_name)">Delete</button>
     <div class="status-container">
       <p class="info" *ngIf="status">{{status}}</p>
       <div *ngIf="!status" class="loader">

@@ -18,6 +18,7 @@ import { LoginGuard } from './login.guard';
 import { TopbarComponent } from './topbar/topbar.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LoaderComponent } from './loader/loader.component';
+import { PopupComponent } from './popup/popup.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { LoaderComponent } from './loader/loader.component';
     EmployeeComponent,
     LoginComponent,
     TopbarComponent,
-    LoaderComponent
+    LoaderComponent,
+    PopupComponent
   ],
   imports: [
     BrowserModule,

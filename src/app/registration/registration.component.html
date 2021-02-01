@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container" @appear>
     <form [formGroup]="form" (ngSubmit)="onSubmit()">
         <label>
             <p><span *ngIf="!edit">* </span>E-mail:</p>

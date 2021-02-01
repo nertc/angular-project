@@ -1,4 +1,4 @@
-<div class="root-container">
+<div class="root-container" [ngStyle]="{'filter': popupService.isShown ? 'blur(5px)' : null}">
   <app-menu></app-menu>
 
   <div class="right-container">
@@ -8,3 +8,5 @@
     </div>
   </div>
 </div>
+
+<app-popup *ngIf="popupService.isShown" @fadeIn></app-popup>

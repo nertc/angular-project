@@ -1,12 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { appear } from '../animations';
 import { AuthService } from '../auth.service';
+import { PopupService } from '../popup.service';
 import { UsersService } from '../users.service';
 
 @Component({
   selector: 'app-users-list',
   templateUrl: './users-list.component.html',
-  styleUrls: ['./users-list.component.scss']
+  styleUrls: ['./users-list.component.scss'],
+  animations: [
+    appear
+  ]
 })
 export class UsersListComponent implements OnInit {
 
@@ -14,6 +19,7 @@ export class UsersListComponent implements OnInit {
     private usersService: UsersService,
     public authService: AuthService,
     private router: Router,
+    private popupService: PopupService,
   ) { }
 
   ngOnInit(): void {
@@ -41,12 +47,14 @@ export class UsersListComponent implements OnInit {
 
   delete( id: any ): void {
     id = Number(id);
-    const sure = confirm(`This action will remove a user with this email: ${this.usersService.getUsers().get(id)?.email}\n\nAre you sure?`);
-    if( sure ) {
-      if( !this.usersService.deleteUser(id) ) {
-        alert('Error occured');
-      }
-    }
+    this.popupService.create(`This action will remove a user with this email: ${this.usersService.getUsers().get(id)?.email}\nAre you sure?`).subscribe(
+      sure => {
+        if( sure ) {
+          if( !this.usersService.deleteUser(id) ) {
+            alert('Error occured');
+          }
+        }
+      });
   }
 
   logout(): void {

@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container" @appear>
   <ul class="employees">
     <li class="employee" *ngFor="let employee of employees; index as i">
       <img [src]="employee.profile_image ? employee.profile_image : '../../assets/images/placeholder.png'" [ngClass]="{'profile': true, 'loading': isLoading[i]}">
@@ -10,7 +10,7 @@
         <div class="buttons">
           <button class="more" [routerLink]="['/employees', employee.id]"><i class="las la-eye"></i>More</button>
           <button class="edit" (click)="change(employee.id, i)"><i class="las la-pen"></i>Edit</button>
-          <button class="delete" (click)="delete(employee.id, i)"><i class="las la-trash-alt"></i>Delete</button>
+          <button class="delete" (click)="delete(employee.id, i, employee.employee_name)"><i class="las la-trash-alt"></i>Delete</button>
         </div>
       </div>
       <form class="change" [style]="'display: ' + (isChanging[i] ? 'block' : 'none')" [formGroup]="fg[i]" (ngSubmit)="submit(employee.id, i)">

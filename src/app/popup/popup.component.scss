@@ -1,0 +1,48 @@
+@import '/src/assets/styles/fonts', '/src/assets/styles/palette';
+
+.popup-container {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  background-color: rgba($color: black, $alpha: 0.75);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.container {
+  width: 800px;
+  height: auto;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+p {
+  font-size: 150%;
+  line-height: 150%;
+  margin-bottom: 50px;
+  white-space: pre;
+}
+
+.buttons {
+  display: grid;
+  column-gap: 10px;
+  grid-auto-flow: column;
+}
+
+button {
+  border: none;
+  font-size: 130%;
+  padding: 10px 20px;
+  border-radius: 5px;
+  background-color: $grey;
+
+  &:nth-child(1) {
+    background-color: $blue;
+    color: $white;
+  }
+}

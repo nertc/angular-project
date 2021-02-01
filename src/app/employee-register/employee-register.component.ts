@@ -1,11 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { appear } from '../animations';
 import { EmployeeManagementService } from '../employee-management.service';
 
 @Component({
   selector: 'app-employee-register',
   templateUrl: './employee-register.component.html',
-  styleUrls: ['./employee-register.component.scss']
+  styleUrls: ['./employee-register.component.scss'],
+  animations: [
+    appear
+  ]
 })
 export class EmployeeRegisterComponent implements OnInit {
   public fg: FormGroup;

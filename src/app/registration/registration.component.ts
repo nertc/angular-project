@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { appear } from '../animations';
 import { User } from '../interfaces';
 import { MathService } from '../math.service';
 import { UsersService } from '../users.service';
@@ -8,7 +9,10 @@ import { UsersService } from '../users.service';
 @Component({
   selector: 'app-registration',
   templateUrl: './registration.component.html',
-  styleUrls: ['./registration.component.scss']
+  styleUrls: ['./registration.component.scss'],
+  animations: [
+    appear
+  ]
 })
 export class RegistrationComponent implements OnInit {
   form: FormGroup = new FormGroup({});

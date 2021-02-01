@@ -1,0 +1,9 @@
+<div class="popup-container" @fadeIn (@fadeIn.done)="container = true">
+  <div class="container" *ngIf="container" @popIn>
+    <p>{{text}}</p>
+    <div class="buttons">
+      <button (click)="accept()">OK</button>
+      <button (click)="deny()">Cancel</button>
+    </div>
+  </div>
+</div>
