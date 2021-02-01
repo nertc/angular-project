@@ -1,0 +1,28 @@
+@import '../../assets/styles/palette';
+
+.loader {
+  width: 100%;
+  padding-top: 28%;
+  position: relative;
+}
+
+.circle {
+  position: absolute;
+  height: 100%;
+  width: 28.5%;
+  top: 0;
+  border-radius: 50%;
+  background-color: $blue;
+}
+
+.circle:nth-child(1) {
+  left: 0;
+}
+
+.circle:nth-child(2) {
+  left: calc(50% - 28.5% / 2);
+}
+
+.circle:nth-child(3) {
+  right: 0;
+}

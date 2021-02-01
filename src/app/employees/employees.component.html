@@ -28,12 +28,16 @@
         </label>
         <div class="info">
           <p *ngIf="status[i]">{{status[i]}}</p>
-          <img src="../../assets/images/loading.svg" alt="Loading..." *ngIf="!status[i]">
+          <div *ngIf="!status[i]" class="loader">
+            <app-loader></app-loader>
+          </div>
           <button type="reset" (click)="isChanging[i] = false; fg[i].reset(); status[i]=' '">Cancel</button>
           <button type="submit" [disabled]="fg[i].invalid">Update</button>
         </div>
       </form>
-      <img src="../../assets/images/loading.svg" alt="Loading..." [ngClass]="{'loader': true, 'hidden': !isLoading[i]}">
+      <div [ngClass]="{'loader': true, 'hidden': !isLoading[i]}">
+        <app-loader></app-loader>
+      </div>
     </li>
   </ul>
   <div class="tools">

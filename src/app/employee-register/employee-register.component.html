@@ -15,7 +15,9 @@
     <button type="submit" [disabled]="fg.invalid">Register</button>
     <div class="status-container">
       <p class="info" *ngIf="status">{{status}}</p>
-      <img src="../../assets/images/loading.svg" alt="Loading..." *ngIf="!status">
+      <div *ngIf="!status" class="loader">
+        <app-loader></app-loader>
+      </div>
     </div>
   </form>
 </div>

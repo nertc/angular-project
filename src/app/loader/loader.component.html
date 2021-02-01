@@ -1,0 +1,5 @@
+<div class="loader">
+  <div class="circle" [@bigSmall]="isBig ? 'big' : 'small'" (@bigSmall.done)="onDone()"></div>
+  <div class="circle" [@bigSmall]="!isBig ? 'big' : 'small'"></div>
+  <div class="circle" [@bigSmall]="isBig ? 'big' : 'small'"></div>
+</div>

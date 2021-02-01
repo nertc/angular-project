@@ -16,6 +16,8 @@ import { EmployeeComponent } from './employee/employee.component';
 import { LoginComponent } from './login/login.component';
 import { LoginGuard } from './login.guard';
 import { TopbarComponent } from './topbar/topbar.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { LoaderComponent } from './loader/loader.component';
 
 @NgModule({
   declarations: [
@@ -28,10 +30,12 @@ import { TopbarComponent } from './topbar/topbar.component';
     EmployeesComponent,
     EmployeeComponent,
     LoginComponent,
-    TopbarComponent
+    TopbarComponent,
+    LoaderComponent
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     AppRoutingModule,
     ReactiveFormsModule,
     HttpClientModule,
